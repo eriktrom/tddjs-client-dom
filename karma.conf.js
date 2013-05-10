@@ -10,9 +10,11 @@ basePath = '';
 files = [
   MOCHA,
   MOCHA_ADAPTER,
-  'js/lib/*.js',
-  'js/src/*.js',
-  'js/test/*.js'
+  'vendor/chai-1.6.0.js',
+
+  'coffee/lib/*.coffee',
+  'coffee/src/*.coffee',
+  'coffee/test/*.coffee'
 
   // coffee -o js/ -cwbl coffee/
 ];
