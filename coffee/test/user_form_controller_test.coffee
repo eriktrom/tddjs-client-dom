@@ -31,3 +31,17 @@ do ->
         expect(domDbl.addEventHandler.args[0]).to.eq @elementDbl
         expect(domDbl.addEventHandler.args[1]).to.eq "submit"
         expect(domDbl.addEventHandler.args[2]).to.be.a "function"
+
+      # verify that the event handler is bound to the controller
+      # object. Use stubFn to record the value of `this` at call time
+      #
+      # assert that the event handler is the controller's handleSubmit method,
+      # readily bound to the controller object
+      it "should handle 'submit' event from elementDbl with bound handleSubmit", ->
+        handleSubmitStub = @controller.handleSubmit = stubFn()
+
+        @controller.setView(@elementDbl)
+        domDbl.addEventHandler.args[2]()
+
+        expect(handleSubmitStub.called).to.eq true
+        expect(handleSubmitStub.thisValue).to.eq @controller

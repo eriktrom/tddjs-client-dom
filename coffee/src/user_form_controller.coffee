@@ -4,6 +4,11 @@ do ->
 
   setView = (element) ->
     element.className = "js-chat"
-    dom.addEventHandler element, "submit", ->
+    dom.addEventHandler element, "submit", @handleSubmit.bind(@)
 
-  tddjs.namespace("chat").userFormController = {setView}
+  handleSubmit = ->
+
+  tddjs.namespace("chat").userFormController = {
+    setView
+    handleSubmit
+  }
