@@ -5,6 +5,8 @@ do ->
   setView = (element) ->
     element.className = "js-chat"
     dom.addEventHandler element, "submit", @handleSubmit.bind(@)
+    # SAME AS
+    # dom.addEventHandler element, "submit", => @handleSubmit()
 
   handleSubmit = ->
 
