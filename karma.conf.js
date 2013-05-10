@@ -11,6 +11,8 @@ files = [
   MOCHA,
   MOCHA_ADAPTER,
   'vendor/chai-1.6.0.js',
+  // 'vendor/jquery-1.9.1.js',
+  // 'vendor/chai-jquery.js',
 
   'coffee/lib/*.coffee',
   'coffee/src/*.coffee',
