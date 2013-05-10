@@ -1,2 +1,5 @@
 do ->
-  tddjs.namespace("chat").userFormController = {}
+
+  setView = ->
+
+  tddjs.namespace("chat").userFormController = {setView}
