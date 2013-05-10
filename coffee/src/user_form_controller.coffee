@@ -6,7 +6,8 @@ do ->
     element.className = "js-chat"
     dom.addEventHandler element, "submit", @handleSubmit.bind(@)
 
-  handleSubmit = ->
+  handleSubmit = (event) ->
+    event.preventDefault()
 
   tddjs.namespace("chat").userFormController = {
     setView

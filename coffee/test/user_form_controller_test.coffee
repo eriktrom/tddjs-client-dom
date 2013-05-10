@@ -45,3 +45,15 @@ do ->
 
         expect(handleSubmitStub.called).to.eq true
         expect(handleSubmitStub.thisValue).to.eq @controller
+
+    describe "#handleSubmit", ->
+      # When a user submits the form, the handler should grab the value from the
+      # form's first input element who's type is text, assign it to the model's
+      # currentUser property and then remove the "js-chat" class name, signifying
+      # end of life for the user component.
+      # Last but not least, the handler needs to abort the events default action
+
+      it "should prevent the event's default browser action", ->
+        eventDbl = {preventDefault: stubFn()}
+        @controller.handleSubmit(eventDbl)
+        expect(eventDbl.preventDefault.called).to.eq true
