@@ -19,6 +19,19 @@ do ->
 
 do ->
   expect = chai.expect
+  fxjour = tddjs.namespace("dom").fxjour
+
+  describe "fxjour", ->
+    it "should embed HTML", ->
+      fixtures.set("<div></div>")
+      expect(fxjour.fixture().tagName.toLowerCase()).to.eq "div"
+
+    it "should append HTML to document", ->
+      fixtures.set('<div id="myDiv"></div>')
+      expect(fxjour.fixtureById("myDiv").tagName.toLowerCase()).to.eq "div"
+
+do ->
+  expect = chai.expect
 
   userController = tddjs.chat.userFormController
   domDbl = tddjs.namespace("dom")
@@ -90,18 +103,10 @@ do ->
         @controller.handleSubmit(@eventDbl)
         expect(@eventDbl.preventDefault.called).to.eq true
 
-      it "should embed HTML", ->
-        fixtures.set("<div></div>")
-        expect(fxjour.fixture().tagName.toLowerCase()).to.eq "div"
-
-      it "should append HTML to document", ->
-        fixtures.set('<div id="myDiv"></div>')
-        expect(fxjour.fixtureById("myDiv").tagName.toLowerCase()).to.eq "div"
-
       # read the username input field and set the value of it to model.currentUser
       it "should set model#currentUser with username input field value", ->
         modelDbl = {}
-        input = fxjour.fixtureDoc().getElementsByTagName("input")[0]
+        input = @elementDbl.getElementsByTagName("input")[0]
         input.value = "erik"
         @controller.setModel(modelDbl)
         @controller.setView(@elementDbl)
@@ -109,3 +114,10 @@ do ->
         @controller.handleSubmit(@eventDbl)
 
         expect(modelDbl.currentUser).to.eq "erik"
+
+      # once the user has been set, the controller should notify any observers
+      # test this by:
+      # - observing the event
+      # - handling the event
+      # - asserting that the observer was called
+      # it "should notify observers of username", ->
