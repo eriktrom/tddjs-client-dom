@@ -6,13 +6,16 @@ do ->
   iframeWindow = ->
     iframe().contentWindow || iframe().contentDocument
 
+  fixtureDoc = ->
+    iframe().contentDocument
+
   fixtureById = (id) ->
-    iframe().contentDocument.getElementById(id)
+    fixtureDoc().getElementById(id)
 
   fixture = (elementId) ->
     iframeWindow().document.body.firstChild
 
-  tddjs.namespace("dom").fxjour = {fixture, fixtureById}
+  tddjs.namespace("dom").fxjour = {fixture, fixtureDoc, fixtureById}
 
 do ->
   expect = chai.expect
@@ -35,6 +38,7 @@ do ->
       '''
       @elementDbl = fxjour.fixture()
       domDbl.addEventHandler = stubFn()
+      @eventDbl = {preventDefault: stubFn()}
 
     afterEach ->
       fixtures.cleanUp()
@@ -83,11 +87,9 @@ do ->
       # Last but not least, the handler needs to abort the events default action
 
       it "should prevent the event's default browser action", ->
-        eventDbl = {preventDefault: stubFn()}
-        @controller.handleSubmit(eventDbl)
-        expect(eventDbl.preventDefault.called).to.eq true
+        @controller.handleSubmit(@eventDbl)
+        expect(@eventDbl.preventDefault.called).to.eq true
 
-    describe "embedding HTML in a mocha test", ->
       it "should embed HTML", ->
         fixtures.set("<div></div>")
         expect(fxjour.fixture().tagName.toLowerCase()).to.eq "div"
@@ -95,3 +97,15 @@ do ->
       it "should append HTML to document", ->
         fixtures.set('<div id="myDiv"></div>')
         expect(fxjour.fixtureById("myDiv").tagName.toLowerCase()).to.eq "div"
+
+      # read the username input field and set the value of it to model.currentUser
+      it "should set model#currentUser with username input field value", ->
+        modelDbl = {}
+        input = fxjour.fixtureDoc().getElementsByTagName("input")[0]
+        input.value = "erik"
+        @controller.setModel(modelDbl)
+        @controller.setView(@elementDbl)
+
+        @controller.handleSubmit(@eventDbl)
+
+        expect(modelDbl.currentUser).to.eq "erik"
