@@ -19,7 +19,16 @@ do ->
   describe "userFormController", ->
     beforeEach ->
       @controller = Object.create(userController)
-      @elementDbl = {}
+      fixtures.set '''
+        <form>
+          <fieldset>
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username">
+            <input type="submit" value="Enter">
+          </fieldset>
+        </form>
+      '''
+      @elementDbl = fixture()
       domDbl.addEventHandler = stubFn()
 
     afterEach ->
