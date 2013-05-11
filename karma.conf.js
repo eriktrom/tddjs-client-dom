@@ -11,6 +11,7 @@ files = [
   MOCHA,
   MOCHA_ADAPTER,
   'vendor/chai-1.6.0.js',
+  'vendor/js-fixtures.js',
   // 'vendor/jquery-1.9.1.js',
   // 'vendor/chai-jquery.js',
 

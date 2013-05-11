@@ -4,11 +4,27 @@ do ->
   userController = tddjs.chat.userFormController
   domDbl = tddjs.namespace("dom")
 
+  iframeWindow = ->
+    iframe = document.getElementById(fixtures.containerId)
+    iframeWindow = iframe.contentWindow || iframe.contentDocument
+
+  fixturesDocument = ->
+    iframeWindow().document
+
+  fixturesBody = ->
+    fixturesDocument().body
+
+  daFixture = ->
+    fixturesBody().firstChild
+
   describe "userFormController", ->
     beforeEach ->
       @controller = Object.create(userController)
       @elementDbl = {}
       domDbl.addEventHandler = stubFn()
+
+    afterEach ->
+      fixtures.cleanUp()
 
     it "should be an object", ->
       expect(userController).to.be.an "object"
@@ -57,3 +73,8 @@ do ->
         eventDbl = {preventDefault: stubFn()}
         @controller.handleSubmit(eventDbl)
         expect(eventDbl.preventDefault.called).to.eq true
+
+    describe "embedding HTML in a mocha test", ->
+      it "should embed HTML", ->
+        fixtures.set("<div></div>")
+        expect(daFixture().tagName.toLowerCase()).to.eq "div"
