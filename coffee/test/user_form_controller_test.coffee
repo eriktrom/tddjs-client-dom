@@ -4,18 +4,17 @@ do ->
   userController = tddjs.chat.userFormController
   domDbl = tddjs.namespace("dom")
 
+  iframe = ->
+    document.getElementById(fixtures.containerId)
+
   iframeWindow = ->
-    iframe = document.getElementById(fixtures.containerId)
-    iframeWindow = iframe.contentWindow || iframe.contentDocument
+    iframe().contentWindow || iframe().contentDocument
 
-  fixturesDocument = ->
-    iframeWindow().document
+  fixtureById = (id) ->
+    iframe().contentDocument.getElementById(id)
 
-  fixturesBody = ->
-    fixturesDocument().body
-
-  daFixture = ->
-    fixturesBody().firstChild
+  fixture = (elementId) ->
+    iframeWindow().document.body.firstChild
 
   describe "userFormController", ->
     beforeEach ->
@@ -77,4 +76,8 @@ do ->
     describe "embedding HTML in a mocha test", ->
       it "should embed HTML", ->
         fixtures.set("<div></div>")
-        expect(daFixture().tagName.toLowerCase()).to.eq "div"
+        expect(fixture().tagName.toLowerCase()).to.eq "div"
+
+      it "should append HTML to document", ->
+        fixtures.set('<div id="myDiv"></div>')
+        expect(fixtureById("myDiv").tagName.toLowerCase()).to.eq "div"
