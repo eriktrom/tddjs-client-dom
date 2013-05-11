@@ -1,8 +1,4 @@
 do ->
-  expect = chai.expect
-
-  userController = tddjs.chat.userFormController
-  domDbl = tddjs.namespace("dom")
 
   iframe = ->
     document.getElementById(fixtures.containerId)
@@ -16,6 +12,15 @@ do ->
   fixture = (elementId) ->
     iframeWindow().document.body.firstChild
 
+  tddjs.namespace("dom").fxjour = {fixture, fixtureById}
+
+do ->
+  expect = chai.expect
+
+  userController = tddjs.chat.userFormController
+  domDbl = tddjs.namespace("dom")
+  fxjour = domDbl.fxjour
+
   describe "userFormController", ->
     beforeEach ->
       @controller = Object.create(userController)
@@ -28,7 +33,7 @@ do ->
           </fieldset>
         </form>
       '''
-      @elementDbl = fixture()
+      @elementDbl = fxjour.fixture()
       domDbl.addEventHandler = stubFn()
 
     afterEach ->
@@ -85,8 +90,8 @@ do ->
     describe "embedding HTML in a mocha test", ->
       it "should embed HTML", ->
         fixtures.set("<div></div>")
-        expect(fixture().tagName.toLowerCase()).to.eq "div"
+        expect(fxjour.fixture().tagName.toLowerCase()).to.eq "div"
 
       it "should append HTML to document", ->
         fixtures.set('<div id="myDiv"></div>')
-        expect(fixtureById("myDiv").tagName.toLowerCase()).to.eq "div"
+        expect(fxjour.fixtureById("myDiv").tagName.toLowerCase()).to.eq "div"
