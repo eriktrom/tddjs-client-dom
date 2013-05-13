@@ -140,3 +140,6 @@ do ->
           expect(observerCbDbl.called).to.eq true
           expect(observerCbDbl.args[0]).to.eq "erik"
 
+        it "should remove the className when successful", ->
+          @controller.handleSubmit(@eventDbl)
+          expect(@elementDbl.className).to.eq ""

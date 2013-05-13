@@ -12,9 +12,10 @@ do ->
   handleSubmit = (event) ->
     event.preventDefault()
     if @view
-      input = @view.getElementsByTagName("input")[0]
-      @model.currentUser = input.value
-      @notify("user", input.value)
+      userName = @view.getElementsByTagName("input")[0].value
+      @view.className = ""
+      @model.currentUser = userName
+      @notify("user", userName)
 
   setModel = (@model) ->
 
