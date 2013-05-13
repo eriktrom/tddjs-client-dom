@@ -113,31 +113,30 @@ do ->
         @controller.handleSubmit(@eventDbl)
         expect(@eventDbl.preventDefault.called).to.eq true
 
-      # read the username input field and set the value of it to model.currentUser
-      it "should set model#currentUser with username input field value", ->
-        @elementDbl.getElementsByTagName("input")[0].value = "erik"
-        @controller.setView(@elementDbl)
-        modelDbl = {}
-        @controller.setModel(modelDbl)
+      context "when the view has been set", ->
 
-        @controller.handleSubmit(@eventDbl)
+        beforeEach ->
+          @elementDbl.getElementsByTagName("input")[0].value = "erik"
+          @controller.setView @elementDbl
+          @modelDbl = {}
+          @controller.setModel @modelDbl
 
-        expect(modelDbl.currentUser).to.eq "erik"
+        # read the username input field and set the value of it to model.currentUser
+        it "should set model#currentUser with username input field value", ->
+          @controller.handleSubmit(@eventDbl)
+          expect(@modelDbl.currentUser).to.eq "erik"
 
-      # once the user has been set, the controller should notify any observers
-        # test this by:
-        # - observing the event
-        # - handling the event
-        # - asserting that the observer was called
-      it "should notify observers of username", ->
-        @elementDbl.getElementsByTagName("input")[0].value = "erik"
-        @controller.setView @elementDbl
-        @controller.setModel {}
-        observerCbDbl = stubFn()
-        @controller.observe("user", observerCbDbl)
+        # once the user has been set, the controller should notify any observers
+          # test this by:
+          # - observing the event
+          # - handling the event
+          # - asserting that the observer was called
+        it "should notify observers of username", ->
+          observerCbDbl = stubFn()
+          @controller.observe("user", observerCbDbl)
 
-        @controller.handleSubmit(@eventDbl)
+          @controller.handleSubmit(@eventDbl)
 
-        expect(observerCbDbl.called).to.eq true
-        expect(observerCbDbl.args[0]).to.eq "erik"
+          expect(observerCbDbl.called).to.eq true
+          expect(observerCbDbl.args[0]).to.eq "erik"
 
