@@ -21,12 +21,23 @@ do ->
       expect(listController.setModel).to.be.a "function"
 
     describe "#setModel", ->
+
+      beforeEach ->
+        @controller = Object.create(listController)
+        @modelDbl = {observe: stubFn()}
+
       it "should observe model's message channel", ->
-        controller = Object.create(listController)
-        modelDbl = {observe: stubFn()}
+        @controller.setModel(@modelDbl)
 
-        controller.setModel(modelDbl)
+        expect(@modelDbl.observe.called).to.eq true
+        expect(@modelDbl.observe.args[0]).to.eq "message"
+        expect(@modelDbl.observe.args[1]).to.be.a "function"
 
-        expect(modelDbl.observe.called).to.eq true
-        expect(modelDbl.observe.args[0]).to.eq "message"
-        expect(modelDbl.observe.args[1]).to.be.a "function"
+      it "should observe with bound addMessage", ->
+        addMessageStub = @controller.addMessage = stubFn()
+
+        @controller.setModel(@modelDbl)
+        @modelDbl.observe.args[1]()
+
+        expect(addMessageStub.called).to.eq true
+        expect(addMessageStub.thisValue).to.eq @controller
