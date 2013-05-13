@@ -11,6 +11,8 @@ The Message List:
 do ->
   expect = chai.expect
   listController = tddjs.chat.messageListController
+  domDbl = tddjs.namespace("dom")
+  fxjour = domDbl.fxjour
 
   describe "messageListController", ->
 
@@ -20,11 +22,11 @@ do ->
     it "should have setModel method", ->
       expect(listController.setModel).to.be.a "function"
 
-    describe "#setModel", ->
+    beforeEach ->
+      @controller = Object.create(listController)
+      @modelDbl = {observe: stubFn()}
 
-      beforeEach ->
-        @controller = Object.create(listController)
-        @modelDbl = {observe: stubFn()}
+    describe "#setModel", ->
 
       # NOTE: when first running the following 2 tests, the 2nd test made the
         # first test fail and it wasn't obvious(until the book told me). The problem
@@ -48,3 +50,13 @@ do ->
 
         expect(addMessageStub.called).to.eq true
         expect(addMessageStub.thisValue).to.eq @controller
+
+    describe "#setView", ->
+
+      beforeEach ->
+        fixtures.set '''<dl></dl>'''
+        @elementDbl = fxjour.fixture()
+
+      it "should set class to 'js-chat'", ->
+        @controller.setView(@elementDbl)
+        expect(@elementDbl.className).to.eq "js-chat"
