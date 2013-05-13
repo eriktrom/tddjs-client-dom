@@ -26,6 +26,13 @@ do ->
         @controller = Object.create(listController)
         @modelDbl = {observe: stubFn()}
 
+      # NOTE: when first running the following 2 tests, the 2nd test made the
+        # first test fail and it wasn't obvious(until the book told me). The problem
+        # was that the error message given by karma pointed to a line inside of
+        # a message_list_controller_test.coffee-compiled.js -- which I don't have
+        # access to with this setup.. Or I might, I just don't know where. This
+        # would have been a place that using in browser tests may hve certainly helped
+        # alot
       it "should observe model's message channel", ->
         @controller.setModel(@modelDbl)
 
