@@ -128,3 +128,93 @@ tddjs.isLocal = do ->
   isLocal = ->
     !!(window.location && window.location.protocol.indexOf("file:") is 0)
   isLocal
+
+`
+tddjs.isEventSupported = (function () {
+  var TAGNAMES = {
+    select: "input",
+    change: "input",
+    submit: "form",
+    reset: "form",
+    error: "img",
+    load: "img",
+    abort: "img"
+  };
+
+  function isEventSupported(eventName) {
+    var tagName = TAGNAMES[eventName];
+    var el = document.createElement(tagName || "div");
+    eventName = "on" + eventName;
+    var isSupported = (eventName in el);
+
+    if (!isSupported) {
+      el.setAttribute(eventName, "return;");
+      isSupported = typeof el[eventName] == "function";
+    }
+
+    el = null;
+
+    return isSupported;
+  }
+
+  return isEventSupported;
+}());
+`
+
+do ->
+  dom = tddjs.namespace("dom")
+  _addEventHandler = null
+
+  return unless Function::call
+
+  normalizeEvent = (event) ->
+    event.preventDefault = ->
+      event.returnValue = false
+    event.target = event.srcElement
+    event
+
+  if tddjs.isHostMethod(document, "addEventListener")
+    _addEventHandler = (element, event, listener) ->
+      element.addEventListener(event, listener, false)
+  else if tddjs.isHostMethod(document, "attachEvent")
+    _addEventHandler = (element, event, listener) ->
+      element.attachEvent "on#{event}", ->
+        event = normalizeEvent(window.event)
+        listener.call(element, event)
+        event.returnValue
+  else return
+
+  mouseenter = (el, listener) ->
+    current = null
+    _addEventHandler el, "mouseover", (event) ->
+      if current isnt el
+        current = el
+        listener.call(el, event)
+
+    _addEventHandler el, "mouseout", (event) ->
+      target = event.relatedTarget || event.toElement
+      try
+        if target && !target.nodeName
+          target = target.parentNode
+      catch e
+        return
+      if el isnt target && !dom.contains(el, target)
+        current = null
+
+  custom = dom.customEvent = {}
+
+  if !tddjs.isEventSupported("mouseenter") &&
+      tddjs.isEventSupported("mouseover") &&
+      tddjs.isEventSupported("mouseout")
+    custom.mouseenter = mouseenter
+
+  dom.supportsEvent = (event) ->
+    tddjs.isEventSupported(event) || !!custom[event]
+
+  addEventHandler = (element, event, listener) ->
+    if dom.customEvents && dom.customEvents[event]
+      dom.customEvents[event](element, listener)
+    _addEventHandler(element, event, listener)
+
+  dom.addEventHandler = addEventHandler
+

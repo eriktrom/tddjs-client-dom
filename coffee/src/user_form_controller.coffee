@@ -1,8 +1,14 @@
 do ->
+  return if typeof tddjs is "undefined" ||
+            typeof document is "undefined"
 
   dom = tddjs.namespace("dom")
   util = tddjs.util # can use this b/c observable.coffee defines/loads first
   chat = tddjs.namespace("chat")
+
+  return if !dom || !dom.addEventHandler || !util || !util.observable ||
+            !Object.create || !document.getElementsByTagName || !Function::bind
+
 
   setView = (element) ->
     element.className = "js-chat"
