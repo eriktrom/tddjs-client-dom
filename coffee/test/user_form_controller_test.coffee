@@ -147,12 +147,17 @@ do ->
           @controller.handleSubmit(@eventDbl)
           expect(@elementDbl.className).to.eq ""
 
-        it "should NOT notify observers if username field is empty", ->
-          @elementDbl.getElementsByTagName("input")[0].value = ""
-          setViewAndModel.call(@)
-          observerCbDbl = stubFn()
-          @controller.observe("user", observerCbDbl)
+        context "when username field is empty", ->
+          beforeEach ->
+            @elementDbl.getElementsByTagName("input")[0].value = ""
+            setViewAndModel.call(@)
+            @observerCbDbl = stubFn()
+            @controller.observe("user", @observerCbDbl)
 
-          @controller.handleSubmit(@eventDbl)
+          it "should NOT notify observers", ->
+            @controller.handleSubmit(@eventDbl)
+            expect(@observerCbDbl.called).to.eq false
 
-          expect(observerCbDbl.called).to.eq false
+          it "should NOT remove the className", ->
+            @controller.handleSubmit(@eventDbl)
+            expect(@elementDbl.className).to.eq "js-chat"
