@@ -62,6 +62,13 @@ do ->
     it "should have setView method", ->
       expect(userController.setView).to.be.a "function"
 
+    it "should play the role of an observable", ->
+      expect(userController.observe).to.be.a "function"
+      expect(userController.hasObserver).to.be.a "function"
+      expect(userController.notify).to.be.a "function"
+      # this is an interface, shared behavior, consider something like
+      # it_should_behave_like
+
     describe "#setView", ->
 
       it "should add js-chat class", ->
@@ -79,10 +86,13 @@ do ->
         expect(domDbl.addEventHandler.args[2]).to.be.a "function"
 
       # verify that the event handler is bound to the controller
-      # object. Use stubFn to record the value of `this` at call time
-      #
-      # assert that the event handler is the controller's handleSubmit method,
-      # readily bound to the controller object
+        # object. Use stubFn to record the value of `this` at call time
+        #
+        # assert that the event handler is the controller's handleSubmit method,
+        # readily bound to the controller object
+        # NOTE: the naming conveention of handleSubmitStub - I use the word stub
+        # here instead of double b/c we're 'stubbing' a method on an object
+        # not creating an object double
       it "should handle 'submit' event from elementDbl with bound handleSubmit", ->
         handleSubmitStub = @controller.handleSubmit = stubFn()
 
@@ -94,10 +104,10 @@ do ->
 
     describe "#handleSubmit", ->
       # When a user submits the form, the handler should grab the value from the
-      # form's first input element who's type is text, assign it to the model's
-      # currentUser property and then remove the "js-chat" class name, signifying
-      # end of life for the user component.
-      # Last but not least, the handler needs to abort the events default action
+        # form's first input element who's type is text, assign it to the model's
+        # currentUser property and then remove the "js-chat" class name, signifying
+        # end of life for the user component.
+        # Last but not least, the handler needs to abort the events default action
 
       it "should prevent the event's default browser action", ->
         @controller.handleSubmit(@eventDbl)
@@ -105,19 +115,29 @@ do ->
 
       # read the username input field and set the value of it to model.currentUser
       it "should set model#currentUser with username input field value", ->
-        modelDbl = {}
-        input = @elementDbl.getElementsByTagName("input")[0]
-        input.value = "erik"
-        @controller.setModel(modelDbl)
+        @elementDbl.getElementsByTagName("input")[0].value = "erik"
         @controller.setView(@elementDbl)
+        modelDbl = {}
+        @controller.setModel(modelDbl)
 
         @controller.handleSubmit(@eventDbl)
 
         expect(modelDbl.currentUser).to.eq "erik"
 
       # once the user has been set, the controller should notify any observers
-      # test this by:
-      # - observing the event
-      # - handling the event
-      # - asserting that the observer was called
-      # it "should notify observers of username", ->
+        # test this by:
+        # - observing the event
+        # - handling the event
+        # - asserting that the observer was called
+      it "should notify observers of username", ->
+        @elementDbl.getElementsByTagName("input")[0].value = "erik"
+        @controller.setView @elementDbl
+        @controller.setModel {}
+        observerCbDbl = stubFn()
+        @controller.observe("user", observerCbDbl)
+
+        @controller.handleSubmit(@eventDbl)
+
+        expect(observerCbDbl.called).to.eq true
+        expect(observerCbDbl.args[0]).to.eq "erik"
+

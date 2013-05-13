@@ -15,6 +15,8 @@ files = [
   // 'vendor/jquery-1.9.1.js',
   // 'vendor/chai-jquery.js',
 
+  'coffee/lib/tdd.coffee',
+  'coffee/lib/stub.coffee',
   'coffee/lib/*.coffee',
   'coffee/src/*.coffee',
   'coffee/test/*.coffee'
