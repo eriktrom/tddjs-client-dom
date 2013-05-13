@@ -13,6 +13,7 @@ do ->
     event.preventDefault()
     if @view
       userName = @view.getElementsByTagName("input")[0].value
+      return unless userName
       @view.className = ""
       @model.currentUser = userName
       @notify("user", userName)

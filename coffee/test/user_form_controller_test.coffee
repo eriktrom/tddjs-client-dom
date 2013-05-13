@@ -115,11 +115,14 @@ do ->
 
       context "when the view has been set", ->
 
-        beforeEach ->
-          @elementDbl.getElementsByTagName("input")[0].value = "erik"
+        setViewAndModel = ->
           @controller.setView @elementDbl
           @modelDbl = {}
           @controller.setModel @modelDbl
+
+        beforeEach ->
+          @elementDbl.getElementsByTagName("input")[0].value = "erik"
+          setViewAndModel.call(@)
 
         # read the username input field and set the value of it to model.currentUser
         it "should set model#currentUser with username input field value", ->
@@ -143,3 +146,13 @@ do ->
         it "should remove the className when successful", ->
           @controller.handleSubmit(@eventDbl)
           expect(@elementDbl.className).to.eq ""
+
+        it "should NOT notify observers if username field is empty", ->
+          @elementDbl.getElementsByTagName("input")[0].value = ""
+          setViewAndModel.call(@)
+          observerCbDbl = stubFn()
+          @controller.observe("user", observerCbDbl)
+
+          @controller.handleSubmit(@eventDbl)
+
+          expect(observerCbDbl.called).to.eq false
