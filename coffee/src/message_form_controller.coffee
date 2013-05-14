@@ -9,6 +9,8 @@ do ->
     @model.notify "message",
       user: @model.currentUser
       message: @view.getElementsByTagName("input")[0].value
+    @view.getElementsByTagName("input")[0].value = ""
+
 
 
 

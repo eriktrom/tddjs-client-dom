@@ -57,6 +57,11 @@ do ->
         @controller.handleSubmit(@eventDbl)
         expect(@eventDbl.preventDefault.called).to.eq true
 
+      it "should clear the form after publish", ->
+        @elementDbl.getElementsByTagName("input")[0].value = "hello caroline"
+        @controller.handleSubmit(@eventDbl)
+        expect(@elementDbl.getElementsByTagName("input")[0].value).to.eq ""
+
       it "should not send empty messages"
 
       it "all methods should handle errors (all methods!)"
