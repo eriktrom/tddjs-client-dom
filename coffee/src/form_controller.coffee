@@ -11,5 +11,9 @@ do ->
     dom.addEventHandler element, "submit", @handleSubmit.bind(@)
     @view = element
 
+  setModel = (@model) ->
+
+
   chat.formController = tddjs.extend({}, util.observable)
   chat.formController.setView = setView
+  chat.formController.setModel = setModel

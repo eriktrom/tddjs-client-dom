@@ -13,8 +13,5 @@ do ->
       @model.currentUser = userName
       @notify("user", userName)
 
-  setModel = (@model) ->
-
   chat.userFormController = Object.create(chat.formController)
-  chat.userFormController.setModel = setModel
   chat.userFormController.handleSubmit = handleSubmit
