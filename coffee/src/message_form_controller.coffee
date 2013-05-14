@@ -6,10 +6,11 @@ do ->
 
   handleSubmit = (event) ->
     event.preventDefault()
+    msgInput = @view.getElementsByTagName("input")[0]
     @model.notify "message",
       user: @model.currentUser
-      message: @view.getElementsByTagName("input")[0].value
-    @view.getElementsByTagName("input")[0].value = ""
+      message: msgInput.value
+    msgInput.value = ""
 
 
 
