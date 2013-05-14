@@ -74,3 +74,6 @@ do ->
 # expect the stub to be called
 
 # NOTE: Mocha passes a test when there is no expectation. What the fuck.
+
+# TODO: To bootstrap the final working application pg 429, 430 + the other todo
+# where I mentioned we needed to do the same after implementing the messageListController
