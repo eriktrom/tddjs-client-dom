@@ -24,6 +24,7 @@ do ->
     daMessage = document.createElement("dd")
     daMessage.innerHTML = message.message.replace(/</g, "&lt;")
     @view.appendChild(daMessage)
+    @view.scrollTop = @view.scrollHeight
 
   tddjs.namespace("chat").messageListController = {
     setModel

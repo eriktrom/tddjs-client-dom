@@ -80,7 +80,7 @@ do ->
 
       # add a message and then expect the definition list(<dl>) to have gained
       # a <dt> element. To pass the test, we need to build an element and append
-      # it to the view
+      # it to the view2
       it "should add dt element with @user", ->
         @controller.addMessage
           user: "erik"
@@ -114,6 +114,22 @@ do ->
 
         expect(@dts.length).to.eq 1
         expect(@dds.length).to.eq 2
+
+      # we can scroll list to the bottom by setting the scrollTop property to
+        # its maximum value. to do this all we need to do is set it to some value
+        # greater than or equal to the max value
+        # The scrollHeight of an element seems like a good fit
+        # It's value is the entire height of the element's contents, which will
+        # always be greater than the greatest possible scrollTop
+      it "should scroll element down", ->
+        elementDbl =
+          appendChild: stubFn()
+          scrollHeight: 1900
+        @controller.setView(elementDbl)
+
+        @controller.addMessage user: "erik", message: "sup man"
+
+        expect(elementDbl.scrollTop).to.eq 1900
 
       # TODO: bottom of page 419 -
         # Highlight any message directed at the current user by marking the dd
