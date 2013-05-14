@@ -108,3 +108,13 @@ do ->
         expected = "&lt;script&gt;window.alert('p4wned!');&lt;/script&gt;"
         dd = @elementDbl.getElementsByTagName("dd")[0]
         expect(dd.innerHTML).to.eq expected
+
+      it "should not repeat the name of the user in a dt when > 1 message received", ->
+        @controller.addMessage {user: "erik", message: "hello world"}
+        @controller.addMessage {user: "erik", message: ":)"}
+
+        dts = @elementDbl.getElementsByTagName("dt")
+        dds = @elementDbl.getElementsByTagName("dd")
+
+        expect(dts.length).to.eq 1
+        expect(dds.length).to.eq 2

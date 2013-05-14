@@ -8,9 +8,11 @@ do ->
     @view = element
 
   addMessage = (message) ->
-    daUser = document.createElement("dt")
-    daUser.innerHTML = "@#{message.user}"
-    @view.appendChild(daUser)
+    if @prevUser isnt message.user
+      daUser = document.createElement("dt")
+      daUser.innerHTML = "@#{message.user}"
+      @view.appendChild(daUser)
+      @prevUser = message.user
 
     daMessage = document.createElement("dd")
     daMessage.innerHTML = message.message.replace(/</g, "&lt;")
