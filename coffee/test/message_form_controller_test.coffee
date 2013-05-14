@@ -33,9 +33,10 @@ do ->
         '''
         @elementDbl = fxjour.fixture()
         @controller.setView(@elementDbl)
+        @eventDbl = {preventDefault: stubFn()}
 
       it "should publish a 'message' event on the model", ->
-        @controller.handleSubmit()
+        @controller.handleSubmit(@eventDbl)
 
         expect(@modelDbl.notify.called).to.eq true
         expect(@modelDbl.notify.args[0]).to.eq "message"
@@ -43,14 +44,27 @@ do ->
 
       it "publishes object that includes currentUser as its user property", ->
         @modelDbl.currentUser = "erik"
-        @controller.handleSubmit()
+        @controller.handleSubmit(@eventDbl)
         expect(@modelDbl.notify.args[1].user).to.eq "erik"
 
       it "should publish message from the form", ->
         @elementDbl.getElementsByTagName("input")[0].value = "hello caroline"
-        @controller.handleSubmit()
+        @controller.handleSubmit(@eventDbl)
         expect(@modelDbl.notify.args[1].message).to.eq "hello caroline"
 
+      it "should prevent default action of submitting to server", ->
+        @eventDbl = {preventDefault: stubFn()}
+        @controller.handleSubmit(@eventDbl)
+        expect(@eventDbl.preventDefault.called).to.eq true
+
+      it "should not send empty messages"
+
+      it "all methods should handle errors (all methods!)"
+
+      it "should emit an event (using observable) from the message once the form
+          is posted. Observe it to display a loader gif and emit a corresponding
+          event from the message list controller when the same message is displayed
+          to removed the loading indicator"
 
 # Publishing Messages
 # When the user submits the form, the controller should publish a message to the
