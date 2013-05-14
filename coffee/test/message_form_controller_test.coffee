@@ -77,3 +77,6 @@ do ->
 
 # TODO: To bootstrap the final working application pg 429, 430 + the other todo
 # where I mentioned we needed to do the same after implementing the messageListController
+
+# TODO: Once you bootstrap the app and get it working, you'll want to fix the
+# scrolling issue, discussed on pg 431,432
