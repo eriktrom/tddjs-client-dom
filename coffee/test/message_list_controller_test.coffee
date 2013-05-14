@@ -14,6 +14,14 @@ do ->
   domDbl = tddjs.namespace("dom")
   fxjour = domDbl.fxjour
 
+  controllerSetup = ->
+    @controller = Object.create(listController)
+    @modelDbl = {observe: stubFn()}
+
+  viewRelatedSetup = ->
+    fixtures.set '''<dl></dl>'''
+    @elementDbl = fxjour.fixture()
+
   describe "messageListController", ->
 
     it "should be an object", ->
@@ -22,11 +30,10 @@ do ->
     it "should have setModel method", ->
       expect(listController.setModel).to.be.a "function"
 
-    beforeEach ->
-      @controller = Object.create(listController)
-      @modelDbl = {observe: stubFn()}
-
     describe "#setModel", ->
+
+      beforeEach ->
+        controllerSetup.call(@)
 
       # NOTE: when first running the following 2 tests, the 2nd test made the
         # first test fail and it wasn't obvious(until the book told me). The problem
@@ -54,9 +61,11 @@ do ->
     describe "#setView", ->
 
       beforeEach ->
-        fixtures.set '''<dl></dl>'''
-        @elementDbl = fxjour.fixture()
+        controllerSetup.call(@)
+        viewRelatedSetup.call(@)
 
       it "should set class to 'js-chat'", ->
         @controller.setView(@elementDbl)
         expect(@elementDbl.className).to.eq "js-chat"
+
+    describe "addMessage", ->
