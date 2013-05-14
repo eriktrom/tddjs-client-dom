@@ -114,3 +114,8 @@ do ->
 
         expect(@dts.length).to.eq 1
         expect(@dds.length).to.eq 2
+
+      # TODO: bottom of page 419 -
+        # Highlight any message directed at the current user by marking the dd
+        # element with a class name. Remember, the current user is available
+        # through @model.currentUser and "directed at" means "message starts with @user"
