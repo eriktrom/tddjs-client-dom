@@ -6,7 +6,7 @@ do ->
   describe "messageFormController", ->
 
     it "should inherit #setView from formController", ->
-      expect(messageController.setView).to.not.be.undefined # tricky, tricky, if both are undefined in the next assertion, they will in fact be eq
+      expect(messageController.setView).to.exist # tricky, tricky, if both are undefined in the next assertion, they will in fact be eq
       expect(messageController.setView).to.eq formController.setView
 
     it "should inherit #setModel from formController", ->
@@ -20,16 +20,21 @@ do ->
 
       beforeEach ->
         @controller = Object.create(messageController)
+        @modelDbl = {notify: stubFn()}
+        @controller.setModel(@modelDbl)
 
       it "should publish a 'message' event on the model", ->
-        modelDbl = {notify: stubFn()}
-        @controller.setModel(modelDbl)
-
         @controller.handleSubmit()
 
-        expect(modelDbl.notify.called).to.eq true
-        expect(modelDbl.notify.args[0]).to.eq "message"
-        expect(modelDbl.notify.args[1]).to.be.a "object"
+        expect(@modelDbl.notify.called).to.eq true
+        expect(@modelDbl.notify.args[0]).to.eq "message"
+        expect(@modelDbl.notify.args[1]).to.be.a "object"
+
+      it "publishes object that includes currentUser as its user property", ->
+        @modelDbl.currentUser = "erik"
+        @controller.handleSubmit()
+        expect(@modelDbl.notify.args[1].user).to.eq "erik"
+
 # Publishing Messages
 # When the user submits the form, the controller should publish a message to the
 # model object

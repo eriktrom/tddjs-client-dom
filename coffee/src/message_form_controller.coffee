@@ -1,7 +1,7 @@
 do ->
 
   handleSubmit = (event) ->
-    @model.notify("message", {})
+    @model.notify("message", {user: @model.currentUser})
 
 
 
