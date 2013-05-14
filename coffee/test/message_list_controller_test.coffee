@@ -119,3 +119,8 @@ do ->
         # Highlight any message directed at the current user by marking the dd
         # element with a class name. Remember, the current user is available
         # through @model.currentUser and "directed at" means "message starts with @user"
+
+      # TODO: pg 420, 421
+        # If you actually want to see this thing work, you'll need to follow the
+        # directions on pgs 420, 421 where we add files from the comet client
+        # and the messageListController to the tddjs-server

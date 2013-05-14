@@ -1,5 +1,12 @@
 do ->
 
+  return if typeof tddjs is "undefined" ||
+            typeof document is "undefined" ||
+            !document.createElement
+  element = document.createElement("dl")
+  return if !element.appendChild || typeof element.innerHTML isnt "string"
+  element = null
+
   setModel = (model) ->
     model.observe "message", @addMessage.bind(@)
 
