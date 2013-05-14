@@ -1,8 +1,9 @@
 do ->
 
   handleSubmit = (event) ->
-    @model.notify("message", {user: @model.currentUser})
-
+    @model.notify "message",
+      user: @model.currentUser
+      message: @view.getElementsByTagName("input")[0].value
 
 
   chat = tddjs.namespace("chat")

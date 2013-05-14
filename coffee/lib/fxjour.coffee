@@ -12,7 +12,7 @@ do ->
   fixtureById = (id) ->
     fixtureDoc().getElementById(id)
 
-  fixture = (elementId) ->
+  fixture = ->
     iframeWindow().document.body.firstChild
 
   tddjs.namespace("dom").fxjour = {fixture, fixtureDoc, fixtureById}

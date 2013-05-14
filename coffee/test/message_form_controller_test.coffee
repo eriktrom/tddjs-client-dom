@@ -2,6 +2,7 @@ do ->
   expect = chai.expect
   messageController = tddjs.chat.messageFormController
   formController = tddjs.chat.formController
+  fxjour = tddjs.namespace("dom").fxjour
 
   describe "messageFormController", ->
 
@@ -22,6 +23,16 @@ do ->
         @controller = Object.create(messageController)
         @modelDbl = {notify: stubFn()}
         @controller.setModel(@modelDbl)
+        fixtures.set '''
+          <form>
+            <fieldset>
+              <input type="text" name="message" id="message">
+              <input type="submit" value="Send">
+            </fieldset>
+          </form>
+        '''
+        @elementDbl = fxjour.fixture()
+        @controller.setView(@elementDbl)
 
       it "should publish a 'message' event on the model", ->
         @controller.handleSubmit()
@@ -34,6 +45,12 @@ do ->
         @modelDbl.currentUser = "erik"
         @controller.handleSubmit()
         expect(@modelDbl.notify.args[1].user).to.eq "erik"
+
+      it "should publish message from the form", ->
+        @elementDbl.getElementsByTagName("input")[0].value = "hello caroline"
+        @controller.handleSubmit()
+        expect(@modelDbl.notify.args[1].message).to.eq "hello caroline"
+
 
 # Publishing Messages
 # When the user submits the form, the controller should publish a message to the
