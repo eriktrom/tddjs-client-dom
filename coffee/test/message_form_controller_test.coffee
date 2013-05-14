@@ -1,7 +1,9 @@
 do ->
   expect = chai.expect
   messageController = tddjs.chat.messageFormController
+  formController = tddjs.chat.formController
 
   describe "messageFormController", ->
-    it "should be an object", ->
-      expect(messageController).to.be.an "object"
+
+    it "should inherit #setView from formController", ->
+      expect(messageController.setView).to.eq formController.setView

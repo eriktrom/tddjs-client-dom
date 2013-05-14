@@ -1,5 +1,6 @@
 do ->
 
-  tddjs.namespace("chat").messageFormController = {
+  chat = tddjs.namespace("chat")
 
-  }
+  chat.messageFormController =
+    Object.create(chat.formController)

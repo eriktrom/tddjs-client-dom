@@ -1,13 +1,8 @@
 do ->
-  return if typeof tddjs is "undefined" ||
-            typeof document is "undefined"
-
-  dom = tddjs.namespace("dom")
+  return if typeof tddjs is "undefined" || typeof document is "undefined"
   util = tddjs.util # can use this b/c observable.coffee defines/loads first
   chat = tddjs.namespace("chat")
-
-  return if !dom || !dom.addEventHandler || !util || !util.observable ||
-            !Object.create || !document.getElementsByTagName || !Function::bind
+  return if !document.getElementsByTagName
 
   handleSubmit = (event) ->
     event.preventDefault()
@@ -20,9 +15,6 @@ do ->
 
   setModel = (@model) ->
 
-  chat.userFormController = tddjs.extend(
-    Object.create(chat.formController),
-    util.observable
-  )
+  chat.userFormController = Object.create(chat.formController)
   chat.userFormController.setModel = setModel
   chat.userFormController.handleSubmit = handleSubmit
