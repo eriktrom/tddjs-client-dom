@@ -69,3 +69,42 @@ do ->
         expect(@elementDbl.className).to.eq "js-chat"
 
     describe "addMessage", ->
+
+      beforeEach ->
+        controllerSetup.call(@)
+        viewRelatedSetup.call(@)
+        @controller.setModel(@modelDbl)
+        @controller.setView(@elementDbl)
+
+      # add a message and then expect the definition list(<dl>) to have gained
+      # a <dt> element. To pass the test, we need to build an element and append
+      # it to the view
+      it "should add dt element with @user", ->
+        @controller.addMessage
+          user: "erik"
+          message: "my name is spelled with a k"
+
+        dts = @elementDbl.getElementsByTagName("dt")
+        expect(dts.length).to.eq 1
+        expect(dts[0].innerHTML).to.eq "@erik"
+
+      it "should add dd element with message", ->
+        @controller.addMessage
+          user: "bob"
+          message: "Hello, I'm bob"
+
+        dds = @elementDbl.getElementsByTagName("dd")
+        expect(dds.length).to.eq 1
+        expect(dds[0].innerHTML).to.eq "Hello, I'm bob"
+
+      it "should escape HTML in messages", ->
+        @controller.addMessage
+          user: "Dr. Evil"
+          message: "<script>window.alert('p4wned!');</script>"
+
+        # in the book he had this:
+          # expected = "&lt;script>window.alert('p4wned!');&lt;/script>"
+          # Not sure what's going on here, notice the &gt; replacement of >
+        expected = "&lt;script&gt;window.alert('p4wned!');&lt;/script&gt;"
+        dd = @elementDbl.getElementsByTagName("dd")[0]
+        expect(dd.innerHTML).to.eq expected
