@@ -9,12 +9,6 @@ do ->
   return if !dom || !dom.addEventHandler || !util || !util.observable ||
             !Object.create || !document.getElementsByTagName || !Function::bind
 
-
-  setView = (element) ->
-    element.className = "js-chat"
-    dom.addEventHandler element, "submit", @handleSubmit.bind(@)
-    @view = element
-
   handleSubmit = (event) ->
     event.preventDefault()
     if @view
@@ -26,7 +20,9 @@ do ->
 
   setModel = (@model) ->
 
-  chat.userFormController = tddjs.extend({}, util.observable)
-  chat.userFormController.setView = setView
+  chat.userFormController = tddjs.extend(
+    Object.create(chat.formController),
+    util.observable
+  )
   chat.userFormController.setModel = setModel
   chat.userFormController.handleSubmit = handleSubmit
